@@ -1,0 +1,9 @@
+
+.styled-checkbox(ng-class="{'reversed': reversed}")
+    input(id="{{ id }}", type="checkbox", ng-model="model", ng-disabled="isDisabled=='true'", ng-change="change()")
+    label(for="{{ id }}")
+        .slider
+            .text.unchecked
+                i(class="icon fa {{uncheckedIcon }}")
+                p.desc(ng-i18next="{{ uncheckedText }}")
+        .mask

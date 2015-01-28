@@ -1,0 +1,143 @@
+function getFluidGridFunction(selector) {
+    return function (focus) {
+        reOrganize(selector, focus);
+    };
+}
+
+handleVideoClick: function (e) {
+        if (e.target.id == 'localVideo') return;
+
+        // e.target is the video element, we want the container
+        var container = $(e.target).parent().parent();
+        var alreadyFocused = container.hasClass('focused');
+        this.$('.videocontainer').removeClass('focused');
+
+        if (!alreadyFocused) {
+            container.addClass('focused');
+            this.shuffle(container.get(0));
+        } else {
+            // clicking on the focused element removes focus
+            this.shuffle();
+        }
+    }
+    handleVideoDoubleClick: function (e) {
+        e.preventDefault();
+        var videoEl = $(e.target)[0];
+        if (videoEl.webkitEnterFullScreen) {
+            videoEl.webkitEnterFullScreen();
+            tracking.track('goingFullscreen', {browser: 'webkit'});
+        } else if (videoEl.mozRequestFullScreen) {
+            videoEl.mozRequestFullScreen();
+            tracking.track('goingFullscreen', {browser: 'mozilla'});
+        }
+    },
+  handleVideoAdded: function (el, peer) {
+        var self = this;
+        app.sounds.play('online');
+        this.hideGame();
+        if (peer) {
+            peer.videoEl = el;
+            tracking.track('videoConnected', {
+                loggedIn: me.authed,
+                name: me.currentRoom,
+                locked: me.roomLocked,
+                reserved: me.roomIsReserved,
+                type: peer.type,
+                peerId: peer.id
+            });
+        }
+
+        // suppress context menu
+        el.oncontextmenu = function () { return false; };
+
+        // video container
+        var container = $(templates.includes.videoContainer());
+        container.attr('id', 'videocontainer_' + (peer ? app.api.getDomId(peer) : 'localScreen'));
+        // video is prepended here
+        container.find('>div').prepend(el);
+        // remotevideos can be focused
+        container.addClass('focusable');
+
+        this.$('#remotes').append(container);
+
+        el.videoStartTime = Date.now();
+        // !important, play actually gets called by SimpleWebRTC
+        // for for some reason this fixes things in FF as of right
+        // now.
+        el.play();
+        el.onresize = function (event) {
+            self.shuffle();
+        };
+        
+        if (peer) {
+            peer.hasdata = false;
+            peer.firstconnect = true;
+        }
+        // functions called when video data arrives
+        // videoWidth and videoHeight are set then
+        el.onloadedmetadata = function (event) {
+        };
+        el.onloadeddata = function (event) {
+            // hide text when we have data
+            container.find('.connectionstate').hide();
+            if (peer) peer.hasdata = true;
+        };
+
+        if (peer && peer.pc) {
+            peer.pc.on('iceConnectionStateChange', function (event) {
+                self.handleIceConnectionStateChange(peer, container);
+            });
+            if (!(peer.pc.iceConnectionState === 'connected' || 
+                  peer.pc.iceConnectionState === 'completed')) {
+                $(el).hide();
+            }
+        }
+
+        this.shuffle();
+    },
+    handleVideoRemoved: function (el, peer) {
+        var conversationLength = Date.now() - el.videoStartTime;
+
+        app.sounds.play('offline');
+        if (peer) {
+            tracking.track('videoDisconnected', {
+                duration: conversationLength,
+                peerId: peer.id,
+                type: peer.type
+            });
+        }
+	
+        $('#videocontainer_' + (peer ? app.api.getDomId(peer) : el.id)).remove();
+        this.shuffle();
+
+        if (!this.$('#remotes video').length) {
+            this.startGame(false);
+        }
+    },
+// recalculate positions on resize
+$(window).on('resize', _.bind(this.shuffle, this, ''));
+
+reOrganize
+getFluidGridFunction
+
+initialize: function () {
+this.shuffle = getFluidGridFunction('#remotes >');
+
+
+}
+
+
+// Extras
+
+  // Shuffle an array.
+  _.shuffle = function(obj) {
+    var rand;
+    var index = 0;
+    var shuffled = [];
+    each(obj, function(value) {
+      rand = _.random(index++);
+      shuffled[index - 1] = shuffled[rand];
+      shuffled[rand] = value;
+    });
+    return shuffled;
+  };

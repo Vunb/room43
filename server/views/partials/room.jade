@@ -1,0 +1,44 @@
+//-
+   Created by Vunb on 26/8/2014.
+
+article.page.talk.room-wrapper
+    session.top-bar.screen-element
+        header.video-space-header
+            div.content-wrapper
+                div.logo
+                    button(type="button", class="btn btn-info", clip-copy="link2Share")
+                        i.fa.fa-copy.padding-top
+                        |&nbsp; Copy link
+                div.room-info.room-url-wrapper
+                    textarea.user-select-enabled.room-url(ng-mouseover="descriptionHover.room = true", ng-mouseleave="descriptionHover.room = false", readonly="readonly", click-autoselect) {{link2Share}}
+                div.right-aligned-button-group
+                    div.lock-room.top-bar-button
+                        div.text(ng-class="{checked: !locked}", unchecked-text="Lock room", checked-text="Room locked")
+                            //-i.icon.fa.fa-lock
+                            i.icon.fa.fa-unlock
+                            p.desc
+                                span {{"Lock room"}}
+                    div.claim-room.top-bar-button
+                        div.text(unchecked-text="Lock room" checked-text="Room locked" model="RoomService.isLocked" checked-icon="fa-lock" unchecked-icon="fa-unlock" isdisabled="{{ isRoomLockDisabled() }}")
+                            i.icon.fa.fa-bullhorn
+                            p.desc
+                                span {{"Claim room"}}
+                    div.exit-room.top-bar-button(ng-click="endCallClick()")
+                        div.text
+                            i.icon.fa.fa-sign-out
+                            p.desc
+                                span {{"Exit room"}}
+
+    session.display.screen-element
+        .videoContainer(ng-show="joined")
+            video#localVideo(style="height:150px;", oncontextmenu="return false;")
+            #localVolume.volumeBar
+            div.message(ng-hide="participants > 0")
+                span Waiting for other people
+                span(dancing-dots)
+        div#localScreenContainer.videoContainer
+        div#remotes
+
+
+    //session.snailroom
+        screenshare(room="roomName")

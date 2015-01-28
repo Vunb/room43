@@ -1,0 +1,86 @@
+//-
+   Created by Vunb on 25/8/2014.
+
+//- script(type="text/javascript").
+    var simpleGuy = new Guy({
+      'appendElement': document.getElementById( 'faceGuy' ),
+      'color': '#D53972'
+    });
+
+
+article#pages.cloud-background
+    section.page.create(role='main')
+        .room43.home
+            div
+                a.sitelogo(href='/', title='Hello !')
+                    span#faceGuy
+            div#createRoom.cf
+                form(ng-submit="createRoom(roomName)")
+                    p.guide Room43.in - one click video conversations
+                    input#sessionInput(ng-model="roomName", placeholder='Name the conversation', autofocus='autofocus', type='text')
+                    button.primary.large(ng-disabled="!roomName", type="submit") Let's go!
+        //-.slogan.bhr.cf
+            h2 Peer‑to‑peer. No install, no plugins, no payment required.
+        //-.features.bhr.cf
+            h2 Anonymous. Peer‑to‑peer. No plugins, signup, or payment required.
+            .feature
+                h3 Group video chat
+                p Add multiple people to the conversation
+            .feature
+                h3 Screen sharing
+                p Easily add anyone's screen to the conversation
+            .feature
+                h3 Locked rooms
+                p Add a shared key to a room for added privacy
+            .feature
+                h3 Rockets & stuff
+                p Play rocket lander while you wait for people to join
+        //-.quote.bhr.cf
+            blockquote “Talky is awesome.”
+            p
+                a(href='https://twitter.com/waxpancake', title='Andy Baio on Twitter') Andy Baio
+            p From the Internet
+        //-.awesome
+            .cf
+                h2 Help make WebRTC awesome by submitting your feedback
+                p
+                    | WebRTC is one of the most transformative additions to the web platform, but it's still early days.
+                p
+                    | By submitting anonymous feedback on a Talky call, you're helping provide data for browser vendors to improve the platform for the web.
+                p
+                    | Read more about this effort at
+                    a(href='http://iswebrtcreadyyet.com/') isWebRTCreadyyet.com
+        //-.aboutUs.bhr.cf
+            .yetis
+                h2 About us
+                a.andyet-logo(href='http://andyet.com/')
+                p
+                    | Talky is built by
+                    a(href='http://andyet.com/') &yet
+                    | , a bootstrapped open web software company from Richland, WA. We make web software for human people.
+                p
+                    | We get a lot of joy out of making the Internet a better place to live and work. Thanks for trying Talky!
+            .webrtc
+                h2
+                    | Talky uses
+                    a(href='http://simplewebrtc.com/') SimpleWebRTC
+                    | .
+                    br
+                    | And so can you!
+                p Talky is built entirely on the open-source SimpleWebRTC toolkit.
+                p
+                    | SimpleWebRTC is intended to be fully interoperable with any signaling platform (open source servers like SignalMaster, federated protocols like XMPP, and commercial products).
+
+footer(role='contentinfo')
+    nav
+        ul
+            li
+                a(ui-sref='about.team', title='About Team') Team
+            li
+                a(ui-sref='about.privacy', title='Legal, Privacy, Contact links') Privacy
+            li
+                a(ui-sref='about.terms', title='Legal, Privacy, Contact links') Terms
+            li
+                a(href='mailto:vunb@bkindex.com', title='Email us') Email
+            li
+                a(href='//twitter.com/Vusnail', title='Room43 on Twitter') @twitter
