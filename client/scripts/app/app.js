@@ -119,7 +119,7 @@ angular
     ])
     .run(['$rootScope', '$state', '$location', '$window', function ($rootScope, $state, $location, $window) {
         $rootScope.$on("$locationChangeStart",function(event, next, current){
-            if (easyrtc.webSocket) {
+            if (window.easyrtc && easyrtc.webSocket) {
                 easyrtc.disconnect();
             }
         });

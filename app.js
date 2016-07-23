@@ -34,6 +34,7 @@ app.use(function(req, res, next) {
 });
 app.use(require('stylus').middleware(path.join(__dirname, 'client/public')));
 app.use(express.static(path.join(__dirname, 'client/public')));
+app.use(express.static(path.join(__dirname, 'client')));
 
 // Router
 app.use('/error', errors);

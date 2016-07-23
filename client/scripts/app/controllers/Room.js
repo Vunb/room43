@@ -5,15 +5,18 @@
 angular.module('videoconference')
     .controller('RoomCtrl', function ($scope, $state, $stateParams, $window, fluidGrid, sounds) {
 
-        var thjs = {};
+        var thiz = {};
+        var signalingServer = $window.location.origin || "/";
         // Grab the room from the URL
-        thjs.roomName = $stateParams.roomName;
-        thjs.participants = 0;
-        thjs.shuffle = fluidGrid('#remotes >');
-        thjs.player = sounds();
-        thjs.$ = angular.element;
-        thjs.api = new SimpleWebRTC({
-            url: 'https://master.room43.in:8888',//'http://signaling.simplewebrtc.com:8888',
+        thiz.roomName = $stateParams.roomName;
+        thiz.participants = 0;
+        thiz.shuffle = fluidGrid('#remotes >');
+        thiz.player = sounds();
+        thiz.$ = angular.element;
+        thiz.api = new SimpleWebRTC({
+            // url: 'https://master.room43.in:8888',//'http://signaling.simplewebrtc.com:8888',
+            // url: '/',//'http://signaling.simplewebrtc.com:8888',
+            url: signalingServer,
             localVideoEl: 'localVideo',
             //remoteVideosEl: 'remotes',
             remoteVideosEl: null,
@@ -24,7 +27,7 @@ angular.module('videoconference')
         });
 
 
-        thjs.handleVideoClick = function (e) {
+        thiz.handleVideoClick = function (e) {
             if (e.target.id == 'localVideo') return;
 
             // e.target is the video element, we want the container #remotes > div > div
@@ -34,15 +37,15 @@ angular.module('videoconference')
 
             if (!alreadyFocused) {
                 container.addClass('focused');
-                thjs.shuffle(container.get(0));
+                thiz.shuffle(container.get(0));
             } else {
                 // clicking on the focused element removes focus
-                thjs.shuffle();
+                thiz.shuffle();
             }
         };
 
-        thjs.handleVideoAdded = function (el, peer) {
-            var self = thjs;
+        thiz.handleVideoAdded = function (el, peer) {
+            var self = thiz;
             self.player.play('online');
             if (peer) {
                 peer.videoEl = el;
@@ -62,8 +65,8 @@ angular.module('videoconference')
             };
 
             // video container
-            var container = thjs.$('<div class="videocontainer"><div><!-- video is prepended here--><div class="connectioninfo"><div class="connectionstate"></div><div class="connectionhelp"></div></div><span class="muted"><i class="ss-icon">volume</i>Muted audio</span><span class="paused"><i class="ss-icon">videocamera </i>Video paused</span></div></div>');
-            container.attr('id', 'videocontainer_' + (peer ? thjs.api.getDomId(peer) : 'localScreen'));
+            var container = thiz.$('<div class="videocontainer"><div><!-- video is prepended here--><div class="connectioninfo"><div class="connectionstate"></div><div class="connectionhelp"></div></div><span class="muted"><i class="ss-icon">volume</i>Muted audio</span><span class="paused"><i class="ss-icon">videocamera </i>Video paused</span></div></div>');
+            container.attr('id', 'videocontainer_' + (peer ? thiz.api.getDomId(peer) : 'localScreen'));
             // video is prepended here
             container.find('>div').prepend(el);
             // remotevideos can be focused
@@ -112,9 +115,9 @@ angular.module('videoconference')
                 });
             }, 100);
         };
-        thjs.handleVideoRemoved = function (el, peer) {
+        thiz.handleVideoRemoved = function (el, peer) {
             var conversationLength = Date.now() - el.videoStartTime
-                , self = thjs
+                , self = thiz
                 ;
 
             self.player.play('offline');
@@ -135,10 +138,10 @@ angular.module('videoconference')
             }, 100);
         };
 
-        thjs.handleEndCallClick = function () {
-            thjs.api.stopScreenShare();
-            thjs.api.stopLocalVideo();
-            thjs.api.disconnect();
+        thiz.handleEndCallClick = function () {
+            thiz.api.stopScreenShare();
+            thiz.api.stopLocalVideo();
+            thiz.api.disconnect();
             //thjs.api.leaveRoom();
             $state.go('home');
         };
@@ -155,34 +158,29 @@ angular.module('videoconference')
          }); //*/
 
         // when it's ready, join if we got a room from the URL
-        thjs.api.startLocalVideo();
-        thjs.api.on('videoAdded', thjs.handleVideoAdded);
-        thjs.api.on('videoRemoved', thjs.handleVideoRemoved);
-        thjs.api.on('readyToCall', function (sessionid) {
+        thiz.api.startLocalVideo();
+        thiz.api.on('videoAdded', thiz.handleVideoAdded);
+        thiz.api.on('videoRemoved', thiz.handleVideoRemoved);
+        thiz.api.on('readyToCall', function (sessionid) {
             // you can name it anything
-            if (thjs.roomName) {
-                thjs.api.joinRoom(thjs.roomName);
+            if (thiz.roomName) {
+                thiz.api.joinRoom(thiz.roomName);
                 console.log("joined sessionid: " + sessionid);
             } else {
                 alert("joint fail")
             }
         });
-        thjs.api.on('joinedRoom', function (roomName) {
+        thiz.api.on('joinedRoom', function (roomName) {
             console.log("joined success, roomName: " + roomName);
-            setTimeout(function () {
-                $scope.$apply(function () {
-                    $scope.joined = true;
-                });
-            }, 100);
         });
-        thjs.$($window).bind('resize', function () {
-            thjs.shuffle();
+        thiz.$($window).bind('resize', function () {
+            thiz.shuffle();
         });
         $scope.participants = 0;
-        $scope.roomName = thjs.roomName;
-        $scope.link2Share = "room43.in/" + thjs.roomName;
-        $scope.handleVideoClick = thjs.handleVideoClick;
-        $scope.endCallClick = thjs.handleEndCallClick;
+        $scope.roomName = thiz.roomName;
+        $scope.link2Share = "room43.in/" + thiz.roomName;
+        $scope.handleVideoClick = thiz.handleVideoClick;
+        $scope.endCallClick = thiz.handleEndCallClick;
     })
 ;
 

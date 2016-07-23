@@ -1,3 +1,8 @@
+.jshintignore
+.jshintrc
+.vscode/
 .idea
+
 node_modules
 bower_components
+client

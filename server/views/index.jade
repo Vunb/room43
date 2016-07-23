@@ -8,6 +8,7 @@ block head
     link(rel='stylesheet', href='//cdnjs.cloudflare.com/ajax/libs/font-awesome/4.1.0/css/font-awesome.min.css')
     //- Local Vendor Scripts
     script(type="text/javascript", src="/vendor/jquery-2.1.1/jquery.min.js")
+    script(type="text/javascript", src="/socket.io/socket.io.js")
     //- Angular Scripts
     script(type="text/javascript", src="/vendor/angular-1.2.19/angular.min.js")
     script(type="text/javascript", src="/vendor/angular-ui-router-0.2.8/angular-ui-router.min.js")
@@ -18,14 +19,20 @@ block head
     //- Application Scripts
         script(type="text/javascript", src="/js/site.js")
     script(type="text/javascript", src="/js/rtc.min.js")
-    script(type="text/javascript", src="/js/site.min.js")
-    //- script(type="text/javascript").
-        (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
-        (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
-        m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
-        })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
-        ga('create', 'UA-48010057-4', 'auto');
-        //- ga('send', 'pageview');
+    //- script(type="text/javascript", src="/js/site.min.js")
+    script(type="text/javascript", src="/scripts/app/app.js")
+    script(type="text/javascript", src="/scripts/app/services/webrtc.js")
+    script(type="text/javascript", src="/scripts/app/services/guid.js")
+    script(type="text/javascript", src="/scripts/app/services/fluidGrid.js")
+    script(type="text/javascript", src="/scripts/app/services/soundEffectManager.js")
+    script(type="text/javascript", src="/scripts/app/services/sounds.js")
+    script(type="text/javascript", src="/scripts/app/controllers/Home.js")
+    script(type="text/javascript", src="/scripts/app/controllers/Room.js")
+    script(type="text/javascript", src="/scripts/app/controllers/Info.js")
+    script(type="text/javascript", src="/scripts/app/directives/Mouse.js")
+    script(type="text/javascript", src="/scripts/app/directives/Screen.js")
+    script(type="text/javascript", src="/scripts/app/directives/screenshare.js")
+    script(type="text/javascript", src="/vendor/eyes.js")
 
 block content
     body.landing(ng-app="videoconference")

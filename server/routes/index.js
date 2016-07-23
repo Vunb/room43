@@ -10,7 +10,7 @@ router.use(function (req, res, next) {
 });
 
 /* GET home page. */
-router.get('/*', function (req, res) {
+router.get('/:rooName?', function (req, res) {
     res.render('index', { title: 'Snailcom'});
 });
 

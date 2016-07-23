@@ -30,8 +30,8 @@ article.page.talk.room-wrapper
                                 span {{"Exit room"}}
 
     session.display.screen-element
-        .videoContainer(ng-show="joined")
-            video#localVideo(style="height:150px;", oncontextmenu="return false;")
+        .videoContainer
+            video#localVideo(style="height:150px;", oncontextmenu="return false;", autoplay)
             #localVolume.volumeBar
             div.message(ng-hide="participants > 0")
                 span Waiting for other people
